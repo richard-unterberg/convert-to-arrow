@@ -1,0 +1,22 @@
+{
+  "name": "convert-to-arrow",
+  "version": "0.1.0",
+  "description": "Codemod that turns function declarations into const arrow functions",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "convert-to-arrow": "./scripts/convert-to-arrow.ts"
+  },
+  "scripts": {
+    "codemod": "tsx ./scripts/convert-to-arrow.ts"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "tsx": "^4",
+    "ts-morph": "^25"
+  },
+  "files": [
+    "scripts",
+    "README.md"
+  ]
+}
