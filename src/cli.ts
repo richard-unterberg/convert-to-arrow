@@ -19,9 +19,13 @@ for (const sf of sourceFiles) {
 
   for (const node of sf.getFunctions()) {
     // skip unsupported contexts
-    if (node.isOverload()) continue
-    if (node.getParentIfKind(SyntaxKind.ClassDeclaration)) continue
+    if (node.isOverload()) continue             
+    if (node.getOverloads().length) continue      
+    if (node.getParentIfKind(SyntaxKind.ClassDeclaration))        continue
     if (node.getParentIfKind(SyntaxKind.ObjectLiteralExpression)) continue
+
+    // `this` parameter is not supported
+    if (node.getParameters().some(p => p.getName() === "this")) continue 
 
     const name = node.getName()
     if (!name) continue // anonymous default export → untouched

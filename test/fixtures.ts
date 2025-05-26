@@ -25,7 +25,7 @@ export function pickFirst<
   // object type
   O extends Record<K[number], unknown>,
 >(keyOrder: K, obj: O): O[K[number]] {
-  for (const k of keyOrder) if (k in obj) return obj[k]
+  for (const k of keyOrder) if (k in obj) return obj[k as K[number]]
   throw new Error("no key found")
 }
 
