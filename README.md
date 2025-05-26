@@ -61,12 +61,13 @@ npx -y convert-to-arrow "**/*.tsx"
 
 ## Contributing / local development
 
-```
+```bash
 git clone https://github.com/richard-unterberg/convert-to-arrow
 cd convert-to-arrow
-npm i         
-npm run dev    
-npm run build  
+npm i # install dependencies
+npm run lefthook # git hooks
+npm run dev # runs the codemod on this project (should convert test/fixtures.ts)
+npm run build # build the codemod - see dist
 ```
 
 Pull requests & issues are welcome!
