@@ -1,11 +1,10 @@
-#!/usr/bin/env tsx
 /**
  * Codemod: convert `function` declarations → `const` arrow functions.
  * • keeps generics verbatim, incl. inline comments & line-breaks
  * • preserves *exactly one* copy of the original JSDoc
  * • supports async, export, export default
  */
-import path from "node:path"
+import * as path from "node:path"
 import { Project, SyntaxKind } from "ts-morph"
 
 const TS_CONFIG_PATH = "tsconfig.json"
@@ -56,7 +55,7 @@ for (const sf of sourceFiles) {
       .join(", ")
     const retTxt = node.getReturnTypeNode()?.getText()
     const retDecl = retTxt ? `: ${retTxt}` : ""
-    const body = node.getBodyText() ?? "{}"
+    const body = node.getBody()?.getText() ?? "{}"
 
     // Arrow header
     const asyncKW = isAsync ? "async " : ""
@@ -79,8 +78,6 @@ for (const sf of sourceFiles) {
 
   if (touched) {
     converted.push(path.relative(process.cwd(), sf.getFilePath()))
-    sf.organizeImports()
-    sf.formatText({ indentSize: 2 })
   }
 }
 

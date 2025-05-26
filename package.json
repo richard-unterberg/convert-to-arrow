@@ -1,22 +1,35 @@
 {
-  "name": "convert-to-arrow",
-  "version": "0.1.0",
-  "description": "Codemod that turns function declarations into const arrow functions",
-  "license": "MIT",
-  "type": "module",
-  "bin": {
-    "convert-to-arrow": "./scripts/convert-to-arrow.ts"
-  },
-  "scripts": {
-    "codemod": "tsx ./scripts/convert-to-arrow.ts"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "tsx": "^4",
-    "ts-morph": "^25"
-  },
-  "files": [
-    "scripts",
-    "README.md"
-  ]
+	"name": "convert-to-arrow",
+	"version": "1.0.7",
+	"description": "Codemod that converts function declarations to const arrow functions",
+	"type": "module",
+	"bin": {
+		"convert-to-arrow": "./dist/cli.js"
+	},
+	"files": ["dist", "README.md", "LICENSE"],
+	"scripts": {
+		"dev": "tsx src/cli.ts",
+		"build": "tsup",
+		"prepublishOnly": "npm run build",
+		"test": "node dist/cli.js --help",
+    "testPublish": "npm publish --dry-run",
+    "release": "npm publish --access public"
+	},
+	"dependencies": {
+		"ts-morph": "^26"
+	},
+	"devDependencies": {
+		"@types/node": "^22.15.21",
+		"tsup": "^8.5.0",
+		"tsx": "^4",
+		"typescript": "^5.8.3"
+	},
+	"engines": {
+		"node": ">=16"
+	},
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/richard-unterberg/convert-to-arrow"
+	}
 }
