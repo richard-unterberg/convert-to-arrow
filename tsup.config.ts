@@ -7,5 +7,5 @@ export default defineConfig({
   dts: true,
   splitting: false,
   banner: { js: "#!/usr/bin/env node" },
-  external: ["ts-morph"]
+  external: ["ts-morph"],
 })

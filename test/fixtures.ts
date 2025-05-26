@@ -31,14 +31,11 @@ export function pickFirst<
 
 function tupleToObject<const T extends readonly string[]>(t: T): { [K in T[number]]: true } {
   // eslint-disable-next-line prefer-object-spread
-  return Object.assign({}, ...t.map(k => ({ [k]: true })))
+  return Object.assign({}, ...t.map((k) => ({ [k]: true })))
 }
 
-export function joinLines(
-  prefix: string | undefined = ">",
-  ...lines: string[]
-): string {
-  return lines.map(l => `${prefix} ${l}`).join("\n")
+export function joinLines(prefix: string | undefined = ">", ...lines: string[]): string {
+  return lines.map((l) => `${prefix} ${l}`).join("\n")
 }
 
 export function toDate(timestamp: number): Date
@@ -48,16 +45,13 @@ export function toDate(x: number | string): Date {
 }
 
 type Parser<T> = { parse(input: unknown): T }
-export async function loadParsed<T>(
-  url: string,
-  parser: Parser<T>,
-): Promise<T> {
+export async function loadParsed<T>(url: string, parser: Parser<T>): Promise<T> {
   const data = await (await fetch(url)).json()
   return parser.parse(data)
 }
 
 export function isStringArray(arr: unknown[]): arr is string[] {
-  return arr.every(x => typeof x === "string")
+  return arr.every((x) => typeof x === "string")
 }
 
 export function assertNever(x: never): never {
@@ -78,7 +72,7 @@ class Timer {
 
   /** Waits `ms` milliseconds, then resets the timer */
   async tick(ms: number): Promise<void> {
-    await new Promise<void>(r => setTimeout(r, ms))
+    await new Promise<void>((r) => setTimeout(r, ms))
     this.reset()
   }
 

@@ -1,27 +1,32 @@
 {
 	"name": "convert-to-arrow",
-	"version": "1.0.7",
-	"description": "Codemod that converts function declarations to const arrow functions",
+	"version": "1.0.11",
+	"description": "Codemod to safely convert function declarations into equivalent arrow-function expressions.",
 	"type": "module",
 	"bin": {
 		"convert-to-arrow": "./dist/cli.js"
 	},
-	"files": ["dist", "README.md", "LICENSE"],
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE"
+	],
 	"scripts": {
 		"dev": "tsx src/cli.ts",
 		"build": "tsup",
 		"prepublishOnly": "npm run build",
 		"test": "node dist/cli.js --help",
-    "testPublish": "npm publish --dry-run",
-    "release": "npm publish --access public"
+		"testPublish": "npm publish --dry-run",
+		"release": "npm publish --access public"
 	},
 	"dependencies": {
-		"ts-morph": "^26"
+		"ts-morph": "^26.0.0"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
 		"@types/node": "^22.15.21",
 		"tsup": "^8.5.0",
-		"tsx": "^4",
+		"tsx": "^4.19.4",
 		"typescript": "^5.8.3"
 	},
 	"engines": {

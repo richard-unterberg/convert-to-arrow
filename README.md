@@ -1,13 +1,6 @@
-# 🏹 convert-to-arrow — codemod for TS / TSX
+# convert-to-arrow - codemod for js/ts files.
 
-Turns every top-level `function` **declaration** in your project into an
-equivalent **`const` arrow-function**, while keeping
-
-* `async` keyword  
-* type parameters verbatim (including comments & pretty line breaks)  
-* parameter & return types  
-* the *single* original JSDoc block  
-* `export …` and `export default` intact  
+Codemod to safely convert `function` declarations into equivalent `const` arrow-function expressions.
 
 ```ts
 // before
@@ -27,9 +20,11 @@ export const getUser = <
 }
 ```
 
+Compatible with TypeScript and JavaScript. See [fixtures](https://github.com/richard-unterberg/convert-to-arrow/blob/master/test/fixtures.ts) for more examples
+
 ## Quick-start (no install required)
 
-run in the root of your repo:
+run in the root of your repo - converts all files in the current directory and subdirectories:
 ```bash
 npx convert-to-arrow
 ```
@@ -38,33 +33,30 @@ or specify a sub-folder / glob (defaults to **/*.{ts,tsx}):
 ```bash
 npx convert-to-arrow src
 ```
-
-| ✔️ Converted                                                   | ❌ Skipped (by design)                                         |
-| -------------------------------------------------------------- | ------------------------------------------------------------- |
-| `function foo() {}` (+ `export` / `export default`)            | Functions inside classes or object literals (preserve `this`) |
-| Generic, async, typed, multi-line forms                        | CommonJS assigns like `module.exports = function …`           |
-| Files matching `**/*.{ts,tsx}` (add `js,jsx` with `--include`) | Overload signatures                                           |
-
+*More path options see [advanced usage](#advanced-usage)*
 
 ## Safety checklist
 
 - Commit/stash your work first – revert is instant.
-- Run the codemod.
-- Review the diff – you should mostly see function → const … =.
-- Run your test suite.
-- Check the files for identation changes – the codemod tries to preserve the original formatting, but it may not be perfect.
+- Run the codemod
+- Review the diff
+- Run test suite / type-checking
+- Check the files for identation changes – the codemod tries to preserve the original formatting, but it may not always succeed.
 
 ## Advanced usage
 
-The CLI currently exposes one optional flag:
-
-| Flag        | Default         | Description                                                                  |
-| ----------- | --------------- | ---------------------------------------------------------------------------- |
-| `--include` | `**/*.{ts,tsx}` | Additional comma-separated globs, e.g.<br>`--include "**/*.{ts,tsx,js,jsx}"` |
+The CLI currently exposes one optional `directory` flag:
 
 ### Example:
 ```bash
-npx convert-to-arrow --include "**/*.{ts,tsx,js,jsx}"
+# convert only files under ./src
+npx -y convert-to-arrow src
+
+# convert two workspaces
+npx -y convert-to-arrow "packages/*/src"
+
+# full glob (quotes required for zsh)
+npx -y convert-to-arrow "**/*.tsx"
 ```
 
 ## Contributing / local development
