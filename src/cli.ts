@@ -12,18 +12,16 @@ const TS_CONFIG_PATH = hasLocalTsconfig ? tsConfigGuess : path.resolve(process.c
 
 const project = new Project({
   tsConfigFilePath: TS_CONFIG_PATH,
-  skipAddingFilesFromTsConfig: true,
+  skipAddingFilesFromTsConfig: false,
 })
 
 const sourceFiles = project.getSourceFiles([userGlob])
 const converted: string[] = []
 
-// log some things from the defined project / path / globs
+console.info("\n📂 welcome to the convert-to-arrow codemod")
 console.log(`\n📂 Using tsconfig: ${TS_CONFIG_PATH}`)
 console.log(`\n📂 Using glob: ${userGlob}`)
-console.log(
-  `\n📂 Found ${sourceFiles.length} source files matching the glob:\n${sourceFiles.map((f) => `  • ${f.getFilePath()}`).join("\n")}`,
-)
+console.log(`\n📂 Found ${sourceFiles.length} source files matching the glob`)
 console.log("\n🔍 Search & process function declarations ...")
 
 for (const sf of sourceFiles) {
@@ -41,6 +39,13 @@ for (const sf of sourceFiles) {
     // no anonymous default export
     const name = node.getName()
     if (!name) continue
+
+    // no asserts return type
+    const retNode = node.getReturnTypeNode()
+    if (retNode) {
+      const retTxt = retNode.getText().trim()
+      if (retTxt.startsWith("asserts ")) continue
+    }
 
     // capture & strip JSDoc
     const jsDocNodes = node.getJsDocs()

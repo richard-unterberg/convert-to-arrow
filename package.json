@@ -1,6 +1,6 @@
 {
 	"name": "convert-to-arrow",
-	"version": "1.0.13",
+	"version": "1.0.17",
 	"description": "Codemod to safely convert function declarations into equivalent arrow-function expressions.",
 	"type": "module",
 	"bin": {
@@ -18,7 +18,7 @@
 		"prepublishOnly": "npm run build",
 		"test": "node dist/cli.js --help",
 		"testPublish": "npm publish --dry-run",
-		"release": "npm publish --access public"
+		"release": "npm run build && npm publish --access public"
 	},
 	"dependencies": {
 		"ts-morph": "^26.0.0"
