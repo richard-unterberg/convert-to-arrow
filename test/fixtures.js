@@ -53,6 +53,30 @@ function withThis(value) {
   this.textContent = value
 }
 
+const _initConf = {
+  someConfig: "default value",
+}
+
+let _config
+
+function assertConfigFullyDefined(config) {
+  let key
+  for (key in config) {
+    if (config[key] === undefined) {
+      throw new Error(`Missing config for ${key}`)
+    }
+  }
+}
+
+export function getConfig() {
+  if (!_config) {
+    assertConfigFullyDefined(_initConf)
+    _config = _initConf
+  }
+
+  return _config
+}
+
 class Timer {
   constructor() {
     this.start = performance.now()
