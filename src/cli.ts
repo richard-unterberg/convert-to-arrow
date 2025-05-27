@@ -1,5 +1,5 @@
-import * as path from "node:path"
 import fs from "node:fs"
+import * as path from "node:path"
 import { Project, SyntaxKind } from "ts-morph"
 
 const cliArg = process.argv[2] ?? "."
@@ -12,11 +12,19 @@ const TS_CONFIG_PATH = hasLocalTsconfig ? tsConfigGuess : path.resolve(process.c
 
 const project = new Project({
   tsConfigFilePath: TS_CONFIG_PATH,
-  skipAddingFilesFromTsConfig: false,
+  skipAddingFilesFromTsConfig: true,
 })
 
 const sourceFiles = project.getSourceFiles([userGlob])
 const converted: string[] = []
+
+// log some things from the defined project / path / globs
+console.log(`\n📂 Using tsconfig: ${TS_CONFIG_PATH}`)
+console.log(`\n📂 Using glob: ${userGlob}`)
+console.log(
+  `\n📂 Found ${sourceFiles.length} source files matching the glob:\n${sourceFiles.map((f) => `  • ${f.getFilePath()}`).join("\n")}`,
+)
+console.log("\n🔍 Search & process function declarations ...")
 
 for (const sf of sourceFiles) {
   let touched = false
@@ -89,7 +97,7 @@ for (const sf of sourceFiles) {
   }
 }
 
-await project.save()
+await Promise.all(project.getSourceFiles().map((sf) => (sf.isSaved() ? Promise.resolve() : sf.save())))
 
 console.log(`\n🗂 Converted ${converted.length} function declarations to arrow functions:\n${converted}`)
 
