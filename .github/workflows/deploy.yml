@@ -1,0 +1,43 @@
+name: Deploy Online Converter
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - docs/**
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: 'npm'
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node_modules-${{hashFiles('package-lock.json')}}
+          restore-keys: node_modules- # Take any latest cache if failed to find it for current yarn.lock
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Page
+        run: npm run build
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: web/dist/client
+          clean: true

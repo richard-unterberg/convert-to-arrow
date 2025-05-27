@@ -1,8 +1,31 @@
 {
 	"name": "convert-to-arrow",
 	"version": "1.0.12",
+	"author": "https://github.com/richard-unterberg",
+  "homepage": "https://richard-unterberg.github.io/convert-to-arrow",
 	"description": "Codemod to safely convert function declarations into equivalent arrow-function expressions.",
 	"type": "module",
+	"keywords": [
+    "react",
+    "classmate",
+    "typescript",
+    "dynamic-classnames",
+    "dynamic-styles",
+    "dynamic-variants",
+    "css",
+    "css-in-js",
+    "utility-first",
+    "utility-first-classnames",
+    "classname",
+    "classname-variants",
+    "frontend",
+    "ssr",
+    "tailwind",
+    "unocss"
+  ],
+	"workspaces": [
+    "web"
+  ],
 	"bin": {
 		"convert-to-arrow": "./dist/cli.js"
 	},
@@ -18,8 +41,13 @@
 		"prepublishOnly": "npm run build",
 		"test": "node dist/cli.js --help",
 		"testPublish": "npm publish --dry-run",
-		"release": "npm publish --access public"
+		"release": "npm publish --access public",
+		"web:build": "cd web/ && npm run build",
+    "web": "cd web/ && npm run dev",
+    "web:prod": "npm run web:build && npm run web:preview",
+    "web:preview": "cd web/ && npm run preview"
 	},
+	"sideEffects": false,
 	"dependencies": {
 		"ts-morph": "^26.0.0"
 	},
@@ -32,7 +60,7 @@
 		"lefthook": "^1.11.13"
 	},
 	"engines": {
-		"node": ">=16"
+		"node": ">=18"
 	},
 	"license": "MIT",
 	"repository": {
