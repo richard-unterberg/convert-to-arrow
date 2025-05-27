@@ -81,7 +81,7 @@ function assertConfigFullyDefined(config: InitConf): asserts config is Config {
   }
 }
 
-export const getConfig = (): Config => {
+export function getConfig(): Config {
   if (!_config) {
     assertConfigFullyDefined(_initConf)
     _config = _initConf
