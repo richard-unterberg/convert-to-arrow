@@ -62,6 +62,34 @@ function withThis(this: HTMLElement, value: string) {
   this.textContent = value
 }
 
+type InitConf = typeof _initConf
+type ConfigKey = keyof InitConf
+type Config = { [K in ConfigKey]: NonNullable<InitConf[K]> }
+
+const _initConf = {
+  someConfig: "default value",
+} as const
+
+let _config: Config
+
+function assertConfigFullyDefined(config: InitConf): asserts config is Config {
+  let key: ConfigKey
+  for (key in config) {
+    if (config[key] === undefined) {
+      throw new Error(`Missing config for ${key}`)
+    }
+  }
+}
+
+export const getConfig = (): Config => {
+  if (!_config) {
+    assertConfigFullyDefined(_initConf)
+    _config = _initConf
+  }
+
+  return _config
+}
+
 class Timer {
   private start = performance.now()
 
