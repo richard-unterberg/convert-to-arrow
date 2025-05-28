@@ -1,14 +1,10 @@
 #!/usr/bin/env bash
-# bench.sh  [COUNT]             (default COUNT = 500)
-#
-# Creates COUNT copies of tests/fixtures.ts, runs the codemod,
-# measures the runtime, then deletes the temp files.
 
 set -euo pipefail
 
-COUNT="${1:-500}"               # how many copies to create
-SRC="test/fixtures.ts"         # source fixture
-TMP="test/tmp-bench"           # temp dir (auto-deleted)
+COUNT="${1:-200}"
+SRC="test/fixtures.ts"        
+TMP="test/tmp-bench"  
 
 if [[ ! -f "$SRC" ]]; then
   echo "❌  $SRC not found"; exit 1
@@ -24,7 +20,7 @@ done
 
 echo "🚀  Running codemod on $COUNT files…"
 START_MS=$(node -p "Date.now()")
-# pass the temp dir as positional arg to the CLI
+
 printf "y\n" | npm run dev -- "$TMP"  > /dev/null
 END_MS=$(node -p "Date.now()")
 

@@ -1,6 +1,6 @@
 {
 	"name": "convert-to-arrow",
-	"version": "1.0.17",
+	"version": "1.0.18",
 	"description": "Codemod to safely convert function declarations into equivalent arrow-function expressions.",
 	"type": "module",
 	"bin": {
@@ -14,6 +14,7 @@
 	"scripts": {
 		"dev": "tsx src/cli.ts",
 		"build": "tsup",
+		"benchmark": "test/benchmark.sh",
 		"lefthook": "lefthook install",
 		"prepublishOnly": "npm run build",
 		"test": "node dist/cli.js --help",

@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": ["dist", ".localPack", "node_modules", "package.json"]
+    "ignore": ["dist", "node_modules", "package.json"]
   },
   "formatter": {
     "enabled": true,
@@ -15,7 +15,7 @@
     "indentStyle": "space",
     "lineWidth": 110,
     "lineEnding": "lf",
-    "ignore": ["dist", ".localPack", "node_modules", "package.json"]
+    "ignore": ["dist", "node_modules", "package.json"]
   },
   "organizeImports": {
     "enabled": true
@@ -28,7 +28,7 @@
         "noExplicitAny": "warn"
       }
     },
-    "ignore": ["dist", ".localPack", "node_modules", "package.json"]
+    "ignore": ["dist", "node_modules", "package.json"]
   },
   "javascript": {
     "formatter": {
