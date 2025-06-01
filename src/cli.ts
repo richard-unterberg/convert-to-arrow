@@ -18,11 +18,9 @@ const project = new Project({
 const sourceFiles = project.getSourceFiles([userGlob])
 const converted: string[] = []
 
-console.info("\n📂 welcome to the convert-to-arrow codemod")
-console.log(`\n📂 Using tsconfig: ${TS_CONFIG_PATH}`)
-console.log(`\n📂 Using glob: ${userGlob}`)
-console.log(`\n📂 Found ${sourceFiles.length} source files matching the glob`)
-console.log("\n🔍 Search & process function declarations ...")
+console.info("\n🙃 welcome to the convert-to-arrow codemod")
+console.log(`\n⚙ Using tsconfig: ${TS_CONFIG_PATH}`)
+console.log(`\n🔍 Found ${sourceFiles.length} source files matching the glob`)
 
 for (const sf of sourceFiles) {
   let touched = false
@@ -67,7 +65,7 @@ for (const sf of sourceFiles) {
     const gt = node.getFirstChildByKind(SyntaxKind.GreaterThanToken)
     if (lt && gt) {
       const src = sf.getFullText()
-      generics = src.slice(lt.getStart(), gt.getEnd()) // includes “< … >”
+      generics = src.slice(lt.getStart(), gt.getEnd())
     }
 
     // params / return / body
@@ -103,8 +101,6 @@ for (const sf of sourceFiles) {
 }
 
 await Promise.all(project.getSourceFiles().map((sf) => (sf.isSaved() ? Promise.resolve() : sf.save())))
-
-console.log(`\n🗂 Converted ${converted.length} function declarations to arrow functions:\n${converted}`)
 
 console.log(
   converted.length
