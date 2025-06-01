@@ -18,9 +18,9 @@ const project = new Project({
 const sourceFiles = project.getSourceFiles([userGlob])
 const converted: string[] = []
 
-console.info("\n🙃 welcome to the convert-to-arrow codemod")
-console.log(`\n⚙ Using tsconfig: ${TS_CONFIG_PATH}`)
-console.log(`\n🔍 Found ${sourceFiles.length} source files matching the glob`)
+console.log("🙃 welcome to the convert-to-arrow codemod")
+console.log(`⚙ Using tsconfig: ${TS_CONFIG_PATH}`)
+console.log(`🔍 Found ${sourceFiles.length} source files matching the glob`)
 
 for (const sf of sourceFiles) {
   let touched = false
@@ -104,6 +104,6 @@ await Promise.all(project.getSourceFiles().map((sf) => (sf.isSaved() ? Promise.r
 
 console.log(
   converted.length
-    ? `\n🗂 ${converted.length} Converted to arrow functions:\n${converted.map((f) => `  • ${f}`).join("\n")}`
-    : "No convertible function declarations found 🎉",
+    ? `🗂 Result: ${converted.length} converted functions:\n${converted.map((f) => `  • ${f}`).join("\n")}`
+    : "🎉 No convertible function declarations found",
 )
