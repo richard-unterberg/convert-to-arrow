@@ -104,6 +104,6 @@ await Promise.all(project.getSourceFiles().map((sf) => (sf.isSaved() ? Promise.r
 
 console.log(
   converted.length
-    ? `\n🗂 Converted to arrow functions:\n${converted.map((f) => `  • ${f}`).join("\n")}`
+    ? `\n🗂 ${converted.length} Converted to arrow functions:\n${converted.map((f) => `  • ${f}`).join("\n")}`
     : "No convertible function declarations found 🎉",
 )
