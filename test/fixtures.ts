@@ -113,3 +113,20 @@ class Timer {
     return `${ms.toFixed(1)} ms`
   }
 }
+
+async function onGetJobs(): Promise<{ items: unknown[]; totalCount: number }> {
+  // do stuff here
+
+  return {
+    items: [],
+    totalCount: 0,
+  }
+}
+export { onGetJobs }
+
+/* this simple default does not work currently 🥲 
+const writeFileAtomic = async (filePath: string, contents: string | Buffer) => {
+  // do stuff here
+}
+export default writeFileAtomic
+*/
