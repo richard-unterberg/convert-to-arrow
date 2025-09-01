@@ -130,3 +130,10 @@ const writeFileAtomic = async (filePath: string, contents: string | Buffer) => {
 }
 export default writeFileAtomic
 */
+
+/* ouch, not working either */
+export function unwrapCallRows<T>(rows: unknown): T[] {
+  const r = rows as unknown[]
+  if (Array.isArray(r) && Array.isArray(r[0])) return r[0] as T[]
+  return rows as T[] // some procs/drivers already flatten
+}
