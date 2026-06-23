@@ -1,6 +1,6 @@
 {
   "name": "convert-to-arrow",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Codemod to safely convert javascript function declarations into equivalent arrow-function expressions.",
   "type": "module",
   "bin": {
@@ -22,12 +22,9 @@
     "lint:check": "biome lint .",
     "format": "biome format --write .",
     "format:check": "biome format .",
-    "prepare": "lefthook install",
-    "prepublishOnly": "npm run build",
-    "test": "npm run build && node --test test/*.test.js",
-    "testPublish": "npm publish --dry-run",
-    "release": "npm run build && npm publish --access public",
     "knip": "knip",
+    "prepare": "lefthook install",
+    "test": "npm run build && node --test test/*.test.js",
     "verify": "npm run knip && npm run format:check && npm run lint:check && npm run typecheck && npm run test",
     "deploy:npm": "node ./scripts/deploy.mjs"
   },
