@@ -1,9 +1,10 @@
 import fs from "node:fs"
 import * as path from "node:path"
-import { Project, SyntaxKind } from "ts-morph"
+import { Node, Project, SyntaxKind } from "ts-morph"
 
 const cliArg = process.argv[2] ?? "."
 const userGlob = cliArg.includes("*") ? cliArg : path.join(cliArg, "/**/*.{ts,tsx}")
+const nodeModulesGlob = path.join(process.cwd(), "**/node_modules/**")
 
 const tsConfigGuess = path.resolve(cliArg, "tsconfig.json")
 
@@ -15,14 +16,32 @@ const project = new Project({
   skipAddingFilesFromTsConfig: false,
 })
 
-const sourceFiles = project.getSourceFiles([userGlob])
+const sourceFiles = project.addSourceFilesAtPaths([userGlob, `!${nodeModulesGlob}`])
 const converted: string[] = []
+
+const hasUnsafeFunctionSemantics = (body: Node): boolean =>
+  body.getDescendants().some((descendant) => {
+    const kind = descendant.getKind()
+    if (kind === SyntaxKind.ThisKeyword || kind === SyntaxKind.SuperKeyword) return true
+    if (kind === SyntaxKind.MetaProperty && descendant.getText() === "new.target") return true
+    return Node.isIdentifier(descendant) && descendant.getText() === "arguments"
+  })
+
+const makeTsxSafeGenerics = (generics: string, filePath: string): string => {
+  if (!filePath.endsWith(".tsx") || !generics || generics.includes(",")) return generics
+  return generics.replace(/>$/, ",>")
+}
 
 console.log("🙃 welcome to the convert-to-arrow codemod")
 console.log(`⚙ Using tsconfig: ${TS_CONFIG_PATH}`)
 console.log(`🔍 Found ${sourceFiles.length} source files matching the glob`)
 
+const isInNodeModules = (filePath: string): boolean => filePath.split(path.sep).includes("node_modules")
+
 for (const sf of sourceFiles) {
+  if (isInNodeModules(sf.getFilePath())) continue
+  if (sf.isDeclarationFile()) continue
+
   let touched = false
 
   for (const node of sf.getFunctions()) {
@@ -30,6 +49,13 @@ for (const sf of sourceFiles) {
     if (node.getOverloads().length) continue
     if (node.getParentIfKind(SyntaxKind.ClassDeclaration)) continue
     if (node.getParentIfKind(SyntaxKind.ObjectLiteralExpression)) continue
+
+    // generators can't be arrow functions
+    if (node.isGenerator()) continue
+
+    const bodyNode = node.getBody()
+    if (!bodyNode) continue
+    if (hasUnsafeFunctionSemantics(bodyNode)) continue
 
     // no `this` parameter
     if (node.getParameters().some((p) => p.getName() === "this")) continue
@@ -57,7 +83,7 @@ for (const sf of sourceFiles) {
     // flags
     const isAsync = node.isAsync()
     const isDefault = node.isDefaultExport()
-    const isNamedExp = node.isExported() && !isDefault
+    const isNamedExp = node.hasExportKeyword() && !isDefault
 
     // generics verbatim
     let generics = ""
@@ -67,6 +93,7 @@ for (const sf of sourceFiles) {
       const src = sf.getFullText()
       generics = src.slice(lt.getStart(), gt.getEnd())
     }
+    generics = makeTsxSafeGenerics(generics, sf.getFilePath())
 
     // params / return / body
     const params = node
@@ -75,7 +102,7 @@ for (const sf of sourceFiles) {
       .join(", ")
     const retTxt = node.getReturnTypeNode()?.getText()
     const retDecl = retTxt ? `: ${retTxt}` : ""
-    const body = node.getBody()?.getText() ?? "{}"
+    const body = bodyNode.getText()
 
     // arrow header
     const asyncKW = isAsync ? "async " : ""
@@ -100,7 +127,12 @@ for (const sf of sourceFiles) {
   }
 }
 
-await Promise.all(project.getSourceFiles().map((sf) => (sf.isSaved() ? Promise.resolve() : sf.save())))
+await Promise.all(
+  project
+    .getSourceFiles()
+    .filter((sf) => !isInNodeModules(sf.getFilePath()))
+    .map((sf) => (sf.isSaved() ? Promise.resolve() : sf.save())),
+)
 
 console.log(
   converted.length
