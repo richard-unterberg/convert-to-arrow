@@ -82,7 +82,7 @@ for (const sf of sourceFiles) {
 
     // flags
     const isAsync = node.isAsync()
-    const isDefault = node.isDefaultExport()
+    const isDefault = node.hasDefaultKeyword()
     const isNamedExp = node.hasExportKeyword() && !isDefault
 
     // generics verbatim
