@@ -1,6 +1,6 @@
-# convert-to-arrow - codemod for js/ts files.
+# convert-to-arrow - codemod for JavaScript and TypeScript files.
 
-Codemod to safely convert `function` declarations into equivalent `const` arrow-function expressions.
+Codemod to safely convert JavaScript and TypeScript `function` declarations into equivalent `const` arrow-function expressions.
 
 ```ts
 // before
@@ -20,16 +20,16 @@ export const getUser = <
 }
 ```
 
-Compatible with TypeScript and JavaScript. See the [node tests](https://github.com/richard-unterberg/convert-to-arrow/tree/master/test) for documented conversion and skip examples.
+Works with `.ts`, `.tsx`, `.js`, and `.jsx` files. The default scan targets TypeScript files (`**/*.{ts,tsx}`) because that is the most common codemod target, but JavaScript is fully supported when you pass a JS-inclusive glob. See the [node tests](https://github.com/richard-unterberg/convert-to-arrow/tree/master/test) for documented conversion and skip examples.
 
 ## Quick-start (no install required)
 
-run in the root of your repo - converts all files in the current directory and subdirectories:
+run in the root of your repo - converts TypeScript files in the current directory and subdirectories:
 ```bash
 npx convert-to-arrow
 ```
 
-or specify a sub-folder / glob (defaults to **/*.{ts,tsx}):
+or specify a sub-folder / glob. Directory inputs default to **/*.{ts,tsx} and always exclude node_modules:
 ```bash
 npx convert-to-arrow src
 ```
@@ -45,7 +45,9 @@ npx convert-to-arrow src
 
 ## Advanced usage
 
-The CLI currently exposes one optional `directory` flag:
+The CLI currently exposes one optional path argument. It can be either a directory or an explicit glob:
+
+`node_modules` is always excluded from conversion, including when you pass a broad glob.
 
 ### Example:
 ```bash
@@ -57,6 +59,9 @@ npx -y convert-to-arrow "packages/*/src"
 
 # full glob (quotes required for zsh)
 npx -y convert-to-arrow "**/*.tsx"
+
+# include JavaScript and TypeScript explicitly
+npx -y convert-to-arrow "**/*.{js,jsx,ts,tsx}"
 ```
 
 ## Contributing / local development

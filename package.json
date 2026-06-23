@@ -1,11 +1,12 @@
 {
   "name": "convert-to-arrow",
-  "version": "1.0.22",
-  "description": "Codemod to safely convert function declarations into equivalent arrow-function expressions.",
+  "version": "1.1.0",
+  "description": "Codemod to safely convert javascript function declarations into equivalent arrow-function expressions.",
   "type": "module",
   "bin": {
     "convert-to-arrow": "./dist/cli.js"
   },
+  "keywords": ["codemod", "javascript", "typescript", "arrow-functions", "refactor", "cli"],
   "files": [
     "dist",
     "README.md",
