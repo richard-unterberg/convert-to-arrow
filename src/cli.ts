@@ -31,6 +31,9 @@ for (const sf of sourceFiles) {
     if (node.getParentIfKind(SyntaxKind.ClassDeclaration)) continue
     if (node.getParentIfKind(SyntaxKind.ObjectLiteralExpression)) continue
 
+    // generators can't be arrow functions
+    if (node.isGenerator()) continue
+
     // no `this` parameter
     if (node.getParameters().some((p) => p.getName() === "this")) continue
 
