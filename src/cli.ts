@@ -12,10 +12,10 @@ const formatSkippedName = (name: string): string => `${name.slice(0, 8)}...`
 
 const formatReport = (skipped: SkippedFunction[]): string =>
   skipped.length
-    ? `❎ Report: ${skipped.length} skipped functions:\n${skipped
+    ? `🗂 Report: ${skipped.length} skipped functions:\n${skipped
         .map((skip) => `  • ${formatSkippedName(skip.name)} - ${skip.filePath}:${skip.line} - ${skip.reason}`)
         .join("\n")}`
-    : "❎ Report: 0 skipped functions"
+    : "🗂 Report: 0 skipped functions"
 
 console.log("++++++++++++++++++++++++++++++++++++++")
 if (shouldReport) {
