@@ -12,20 +12,26 @@ const formatSkippedName = (name: string): string => `${name.slice(0, 8)}...`
 
 const formatReport = (skipped: SkippedFunction[]): string =>
   skipped.length
-    ? `🗂 Report: ${skipped.length} skipped functions:\n${skipped
+    ? `❎ Report: ${skipped.length} skipped functions:\n${skipped
         .map((skip) => `  • ${formatSkippedName(skip.name)} - ${skip.filePath}:${skip.line} - ${skip.reason}`)
         .join("\n")}`
-    : "🗂 Report: 0 skipped functions"
+    : "❎ Report: 0 skipped functions"
 
-console.log("🙃 welcome to the convert-to-arrow codemod")
-console.log(`⚙ Using tsconfig: ${context.tsConfigPath}`)
-console.log(`🔍 Found ${context.sourceFiles.length} source files matching the glob`)
+console.log("++++++++++++++++++++++++++++++++++++++")
+if (shouldReport) {
+  console.log("convert-to-arrow codemod (Report) ++++")
+} else {
+  console.log("convert-to-arrow codemod +++++++++++++")
+}
+console.log(`${context.tsConfigPath}`)
+console.log("++++++++++++++++++++++++++++++++++++++")
+console.log(`🔍 Found ${context.sourceFiles.length} source files matching the glob:`)
 
 const { converted, skipped } = await transformProject(context)
 
 console.log(
   converted.length
-    ? `🗂 Result: ${converted.length} converted files:\n${converted.map((file) => `  • ${file}`).join("\n")}`
+    ? `✅ Result: ${converted.length} converted files:\n${converted.map((file) => `  • ${file}`).join("\n")}`
     : "🎉 No convertible function declarations found",
 )
 
