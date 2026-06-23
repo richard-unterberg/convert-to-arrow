@@ -26,7 +26,7 @@
     "prepare": "lefthook install",
     "test": "npm run build && node --test test/*.test.js",
     "verify": "npm run knip && npm run format:check && npm run lint:check && npm run typecheck && npm run test",
-    "deploy:npm": "node ./scripts/deploy.mjs"
+    "deploy:npm": "npm run verify && node ./scripts/deploy.mjs"
   },
   "dependencies": {
     "ts-morph": "^28.0.0"
