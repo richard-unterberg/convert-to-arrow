@@ -1,5 +1,6 @@
 import assert from "node:assert/strict"
 import { spawnSync } from "node:child_process"
+import type { SpawnSyncReturns } from "node:child_process"
 import fs from "node:fs"
 import os from "node:os"
 import path from "node:path"
@@ -23,7 +24,7 @@ const defaultTsconfig = {
   include: ["**/*"],
 }
 
-export function createProject(files, tsconfig = defaultTsconfig) {
+export function createProject(files: Record<string, string>, tsconfig: object = defaultTsconfig): string {
   const projectDir = fs.mkdtempSync(path.join(os.tmpdir(), "convert-to-arrow-test-"))
   writeProjectFile(projectDir, "tsconfig.json", `${JSON.stringify(tsconfig, null, 2)}\n`)
 
@@ -34,15 +35,15 @@ export function createProject(files, tsconfig = defaultTsconfig) {
   return projectDir
 }
 
-export function readProjectFile(projectDir, filePath) {
+export function readProjectFile(projectDir: string, filePath: string): string {
   return fs.readFileSync(path.join(projectDir, filePath), "utf8")
 }
 
-export function removeProject(projectDir) {
+export function removeProject(projectDir: string): void {
   fs.rmSync(projectDir, { force: true, recursive: true })
 }
 
-export function runCli(projectDir, target = projectDir) {
+export function runCli(projectDir: string, target: string | string[] = projectDir): SpawnSyncReturns<string> {
   const args = Array.isArray(target) ? target : [target]
   const result = spawnSync(process.execPath, [cliPath, ...args], {
     cwd: repoRoot,
@@ -53,7 +54,7 @@ export function runCli(projectDir, target = projectDir) {
   return result
 }
 
-export function assertTypeScriptProject(projectDir) {
+export function assertTypeScriptProject(projectDir: string): void {
   const result = spawnSync(process.execPath, [tscPath, "--noEmit", "-p", projectDir], {
     cwd: repoRoot,
     encoding: "utf8",
@@ -62,7 +63,7 @@ export function assertTypeScriptProject(projectDir) {
   assert.equal(result.status, 0, result.stderr || result.stdout)
 }
 
-function writeProjectFile(projectDir, filePath, contents) {
+function writeProjectFile(projectDir: string, filePath: string, contents: string): void {
   const fullPath = path.join(projectDir, filePath)
   fs.mkdirSync(path.dirname(fullPath), { recursive: true })
   fs.writeFileSync(fullPath, contents)

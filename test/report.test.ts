@@ -100,6 +100,6 @@ function calledBefore() {
   assert.match(afterTarget.stdout, /🗂 Report: 1 skipped functions:/)
 })
 
-function escapeRegExp(value) {
+function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 }
