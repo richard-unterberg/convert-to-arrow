@@ -46,3 +46,37 @@ const function2 = () => {
 `,
   )
 })
+
+test("skips functions that are called before their declaration", (t) => {
+  const projectDir = createProject({
+    "sample.js": `import { isDebug } from "./debug.js"
+
+if (isDebug("vike:log")) {
+  trackLogs()
+}
+
+function trackLogs() {
+  process.stdout.write("debug\\n")
+}
+`,
+    "debug.js": `export const isDebug = () => true
+`,
+  })
+  t.after(() => removeProject(projectDir))
+
+  runCli(projectDir, path.join(projectDir, "**/*.js"))
+
+  assert.equal(
+    readProjectFile(projectDir, "sample.js"),
+    `import { isDebug } from "./debug.js"
+
+if (isDebug("vike:log")) {
+  trackLogs()
+}
+
+function trackLogs() {
+  process.stdout.write("debug\\n")
+}
+`,
+  )
+})

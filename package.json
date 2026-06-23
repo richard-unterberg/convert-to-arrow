@@ -1,6 +1,6 @@
 {
   "name": "convert-to-arrow",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Codemod to safely convert javascript function declarations into equivalent arrow-function expressions.",
   "type": "module",
   "bin": {

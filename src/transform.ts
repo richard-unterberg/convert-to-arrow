@@ -3,15 +3,40 @@ import type { FunctionDeclaration, SourceFile } from "ts-morph"
 import { convertDefaultExportFunction } from "./functions/default-export.js"
 import { convertExportedFunction } from "./functions/exported-function.js"
 import { convertLocalFunction } from "./functions/local-function.js"
+import {
+  analyzeFunctionDeclaration,
+  type ConvertibleFunctionParts,
+  type SkipReason,
+} from "./functions/skip-rules.js"
 import { type ProjectContext, isInNodeModules } from "./project.js"
 
-const convertFunction = (node: FunctionDeclaration, sourceFile: SourceFile): boolean =>
-  convertDefaultExportFunction(node, sourceFile) ||
-  convertExportedFunction(node, sourceFile) ||
-  convertLocalFunction(node, sourceFile)
+export type SkippedFunction = {
+  filePath: string
+  line: number
+  name: string
+  reason: SkipReason
+}
 
-export const transformProject = async ({ project, sourceFiles }: ProjectContext): Promise<string[]> => {
+export type TransformResult = {
+  converted: string[]
+  skipped: SkippedFunction[]
+}
+
+const convertFunction = (
+  node: FunctionDeclaration,
+  sourceFile: SourceFile,
+  parts: ConvertibleFunctionParts,
+): boolean =>
+  convertDefaultExportFunction(node, sourceFile, parts) ||
+  convertExportedFunction(node, sourceFile, parts) ||
+  convertLocalFunction(node, sourceFile, parts)
+
+export const transformProject = async ({
+  project,
+  sourceFiles,
+}: ProjectContext): Promise<TransformResult> => {
   const converted: string[] = []
+  const skipped: SkippedFunction[] = []
 
   for (const sourceFile of sourceFiles) {
     if (isInNodeModules(sourceFile.getFilePath())) continue
@@ -20,7 +45,19 @@ export const transformProject = async ({ project, sourceFiles }: ProjectContext)
     let touched = false
 
     for (const node of sourceFile.getFunctions()) {
-      if (convertFunction(node, sourceFile)) {
+      const analysis = analyzeFunctionDeclaration(node)
+
+      if (analysis.kind === "skipped") {
+        skipped.push({
+          filePath: sourceFile.getFilePath(),
+          line: node.getStartLineNumber(),
+          name: analysis.name,
+          reason: analysis.reason,
+        })
+        continue
+      }
+
+      if (convertFunction(node, sourceFile, analysis)) {
         touched = true
       }
     }
@@ -37,5 +74,5 @@ export const transformProject = async ({ project, sourceFiles }: ProjectContext)
       .map((sourceFile) => (sourceFile.isSaved() ? Promise.resolve() : sourceFile.save())),
   )
 
-  return converted
+  return { converted, skipped }
 }

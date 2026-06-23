@@ -43,7 +43,8 @@ export function removeProject(projectDir) {
 }
 
 export function runCli(projectDir, target = projectDir) {
-  const result = spawnSync(process.execPath, [cliPath, target], {
+  const args = Array.isArray(target) ? target : [target]
+  const result = spawnSync(process.execPath, [cliPath, ...args], {
     cwd: repoRoot,
     encoding: "utf8",
   })
