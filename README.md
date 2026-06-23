@@ -64,6 +64,27 @@ npx -y convert-to-arrow "**/*.tsx"
 npx -y convert-to-arrow "**/*.{js,jsx,ts,tsx}"
 ```
 
+### Report skipped functions
+
+Pass `--report` to append a compact list of skipped functions to the normal conversion output:
+
+```bash
+npx -y convert-to-arrow --report src
+
+# the flag can also come after the path/glob
+npx -y convert-to-arrow src --report
+```
+
+Example report output:
+
+```text
+🗂 Report: 2 skipped functions:
+  • trackLog... - /absolute/path/to/src/log.ts:12 - referenced before declaration
+  • collectA... - /absolute/path/to/src/runtime.ts:34 - uses arguments
+```
+
+Skipped functions are left unchanged when converting them would change runtime behavior or produce invalid output.
+
 ## Contributing / local development
 
 ```bash
