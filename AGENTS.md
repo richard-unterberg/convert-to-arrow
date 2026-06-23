@@ -1,0 +1,1 @@
+- always confirm prompts / worksteps with `npm run verify`

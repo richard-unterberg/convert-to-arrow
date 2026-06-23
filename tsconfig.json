@@ -9,7 +9,8 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "strict": true,
-    "allowJs": true
+    "allowJs": true,
+    "types": ["node"]
   },
   "include": ["src/**/*", "test/**/*"],
   "exclude": ["node_modules", "dist"]

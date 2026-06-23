@@ -1,6 +1,14 @@
 pre-commit:
+  parallel: false
   commands:
-    check:
-      glob: "*.{js,ts,cjs,mjs,jsx,tsx,json,jsonc}"
-      run: npx @biomejs/biome check --write --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {staged_files}
+    format:
+      glob: '*.{ts,tsx,cts,mts,js,jsx,cjs,mjs,json,jsonc,css,md}'
       stage_fixed: true
+      run: npm exec -- biome format --write --no-errors-on-unmatched {staged_files}
+    lint:
+      glob: '*.{ts,tsx,cts,mts,js,jsx,cjs,mjs,json,jsonc,css,md}'
+      stage_fixed: true
+      run: npm exec -- biome lint --no-errors-on-unmatched {staged_files}
+    knip:
+      glob: '*.{ts,tsx,cts,mts,js,jsx,cjs,mjs}'
+      run: npm run knip

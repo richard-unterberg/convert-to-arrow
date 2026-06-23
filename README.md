@@ -20,7 +20,7 @@ export const getUser = <
 }
 ```
 
-Compatible with TypeScript and JavaScript. See [fixtures](https://github.com/richard-unterberg/convert-to-arrow/blob/master/test/fixtures.ts) for more examples
+Compatible with TypeScript and JavaScript. See the [node tests](https://github.com/richard-unterberg/convert-to-arrow/tree/master/test) for documented conversion and skip examples.
 
 ## Quick-start (no install required)
 
@@ -66,8 +66,9 @@ git clone https://github.com/richard-unterberg/convert-to-arrow
 cd convert-to-arrow
 npm i # install dependencies
 npm run lefthook # git hooks
-npm run dev # runs the codemod on this project (should convert test/fixtures.ts)
+npm run test # builds the codemod and runs the node:test suite against dist/cli.js
 npm run build # build the codemod - see dist
+npm run verify # run repository checks
 ```
 
 Pull requests & issues are welcome!
