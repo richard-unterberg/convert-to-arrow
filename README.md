@@ -1,4 +1,4 @@
-# convert-to-arrow - codemod for JavaScript and TypeScript files.
+# convert-to-arrow - codemod for JavaScript, TypeScript, Astro and Vue files.
 
 Codemod to safely convert JavaScript and TypeScript `function` declarations into equivalent `const` arrow-function expressions.
 
@@ -20,16 +20,16 @@ export const getUser = <
 }
 ```
 
-Works with `.ts`, `.tsx`, `.js`, and `.jsx` files. The default scan targets TypeScript files (`**/*.{ts,tsx}`) because that is the most common codemod target, but JavaScript is fully supported when you pass a JS-inclusive glob. See the [node tests](https://github.com/richard-unterberg/convert-to-arrow/tree/master/test) for documented conversion and skip examples.
+Works with `.ts`, `.tsx`, `.js`, `.jsx`, `.astro`, and `.vue` files. The default scan targets `**/*.{ts,tsx,astro,vue}`. JavaScript files are supported when you pass a JS-inclusive glob. See the [node tests](https://github.com/richard-unterberg/convert-to-arrow/tree/master/test) for documented conversion and skip examples.
 
 ## Quick-start (no install required)
 
-run in the root of your repo - converts TypeScript files in the current directory and subdirectories:
+run in the root of your repo - converts TypeScript, Astro and Vue files in the current directory and subdirectories:
 ```bash
 npx convert-to-arrow
 ```
 
-or specify a sub-folder / glob. Directory inputs default to **/*.{ts,tsx} and always exclude node_modules:
+or specify a sub-folder / glob. Directory inputs default to `**/*.{ts,tsx,astro,vue}` and always exclude node_modules:
 ```bash
 npx convert-to-arrow src
 ```
@@ -62,7 +62,16 @@ npx -y convert-to-arrow "**/*.tsx"
 
 # include JavaScript and TypeScript explicitly
 npx -y convert-to-arrow "**/*.{js,jsx,ts,tsx}"
+
+# include all supported file types
+npx -y convert-to-arrow "**/*.{js,jsx,ts,tsx,astro,vue}"
 ```
+
+### Astro and Vue components
+
+In `.astro` files, the codemod converts functions in the [frontmatter component script](https://docs.astro.build/en/reference/astro-syntax/) and embedded JavaScript/TypeScript `<script>` blocks. In `.vue` files, it converts functions in both [`<script>` and `<script setup>`](https://vuejs.org/api/sfc-spec.html), including `lang="ts"`, `lang="tsx"`, and `lang="jsx"`.
+
+Templates, styles, HTML comments, and Vue custom blocks are preserved. External `<script src="...">` blocks, data scripts such as JSON-LD, and unsupported script languages are skipped. All existing function safety checks also apply inside components. Reports use the component's original path and line numbers.
 
 ### Report skipped functions
 

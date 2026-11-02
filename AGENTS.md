@@ -8,15 +8,20 @@
 
 ## Core Implementation
 
-- The codemod is implemented with `ts-morph` in `src/cli.ts`.
+- The CLI is in `src/cli.ts`; discovery is in `src/project.ts`, and conversion is in
+  `src/transform.ts` and `src/functions/`.
+- `src/components.ts` uses the Astro and Vue parsers to extract embedded script blocks.
+  Templates, styles, comments, and Vue custom blocks must remain unchanged.
 - The CLI accepts one optional path argument. Non-glob inputs are expanded to
-  `/**/*.{ts,tsx}`; explicit glob inputs are used as provided.
+  `/**/*.{ts,tsx,astro,vue}`; explicit glob inputs are used as provided.
 - `node_modules` is always excluded from conversion.
 - The CLI chooses a `tsconfig.json` from the provided directory when present, otherwise from the
   repository root/current working directory.
-- Default scanning targets `.ts` and `.tsx`. JavaScript is supported only when callers pass an
+- Default scanning targets `.ts`, `.tsx`, `.astro`, and `.vue`. JavaScript files are supported only when callers pass an
   explicit JS-inclusive glob such as `"**/*.{js,jsx,ts,tsx}"`.
-- Do not edit `dist/` directly. Change `src/cli.ts` and let `npm run build` regenerate output.
+- Astro frontmatter and embedded scripts, and Vue normal/setup scripts, reuse the existing
+  conversion rules. External scripts, data scripts, and unsupported languages are skipped.
+- Do not edit `dist/` directly. Change `src/` and let `npm run build` regenerate output.
 
 ## Conversion Rules To Preserve
 

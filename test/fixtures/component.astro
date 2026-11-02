@@ -1,0 +1,51 @@
+---
+/** Formats a heading. */
+function heading(label = "Astro"): string {
+  return `Hello ${label}`
+}
+
+async function loadHeading(): Promise<string> {
+  return heading()
+}
+
+function identity<T>(value: T): T {
+  return value
+}
+
+const initial = hoisted()
+function hoisted() {
+  return "ready"
+}
+
+function collectArguments() {
+  // biome-ignore lint/style/noArguments: intentional skip coverage for function-only semantics
+  return arguments.length
+}
+---
+<!-- 🌍 <script>function commentedOut() {}</script> -->
+<main data-label="a>b">
+  <h1>{heading()}</h1>
+  <pre>function templateText() {}</pre>
+</main>
+<style>
+  main::before { content: "function styleText() {}"; }
+</style>
+<script>
+  /** Handles a click. */
+  function handleClick(value: string): string {
+    return value.toUpperCase()
+  }
+
+  function unsafeHandler() {
+    return this
+  }
+</script>
+<script is:inline data-label="a>b">
+  function inlineGreeting(name = "world") {
+    return `Hello ${name}`
+  }
+</script>
+<script type="application/ld+json">
+  { "example": "function jsonText() {}" }
+</script>
+<script src="./external.js"></script>

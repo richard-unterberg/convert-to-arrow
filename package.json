@@ -1,6 +1,6 @@
 {
   "name": "convert-to-arrow",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "description": "Codemod to safely convert javascript function declarations into equivalent arrow-function expressions.",
   "type": "module",
   "bin": {
@@ -29,6 +29,8 @@
     "deploy:npm": "npm run verify && node ./scripts/deploy.mjs"
   },
   "dependencies": {
+    "@astrojs/compiler": "^4.0.0",
+    "@vue/compiler-sfc": "^3.5.44",
     "ts-morph": "^28.0.0"
   },
   "devDependencies": {

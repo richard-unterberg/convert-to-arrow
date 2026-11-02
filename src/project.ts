@@ -15,7 +15,7 @@ export const isInNodeModules = (filePath: string): boolean =>
   filePath.split(path.sep).includes("node_modules")
 
 export const createProjectContext = (cliArg: string): ProjectContext => {
-  const userGlob = cliArg.includes("*") ? cliArg : path.join(cliArg, "/**/*.{ts,tsx}")
+  const userGlob = cliArg.includes("*") ? cliArg : path.join(cliArg, "/**/*.{ts,tsx,astro,vue}")
   const nodeModulesGlob = path.join(process.cwd(), "**/node_modules/**")
 
   const tsConfigGuess = path.resolve(cliArg, "tsconfig.json")
